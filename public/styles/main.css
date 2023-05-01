@@ -1,0 +1,29 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.container h1 {
+  text-align: center;
+}
+.container .articles .article-item {
+  margin-bottom: 20px;
+}
+.container .articles .article-item .article-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: blue;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.container .articles .article-item .hidden {
+  display: none;
+}
+.container .add-article-btn {
+  border: none;
+  outline: none;
+  background-color: lightgreen;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}/*# sourceMappingURL=main.css.map */
