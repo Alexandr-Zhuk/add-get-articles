@@ -18,6 +18,10 @@
 .container .articles .article-item .hidden {
   display: none;
 }
+.container .articles .article-item .span-tags {
+  color: black;
+  font-size: 14px;
+}
 .container .add-article-btn {
   border: none;
   outline: none;

@@ -2,34 +2,35 @@ const articles = document.querySelector('.articles');
 const addArticle = document.querySelector('.add-article-btn');
 const artName = document.querySelector('input[name=article-name]');
 const artText = document.querySelector('textarea[name=articleText]');
+const tagSearch = document.querySelector('input[name=tag-searc-inp]');
 
-
-console.log(artText);
-
-const renderArticles = async () => {
-    const listArticles = await axios.get('/articles/list');
-
-    console.log(listArticles);
+let listArticles;
+const renderArticles = async (listA) => {
 
     let html = '';
 
-    listArticles.data.forEach((item) => {
+    listA.data.forEach((item) => {
+        let tags = item.tags.join(', ');
+       
         html += `<div class="article-item">
-                    <div class="article-name">${item.name}</div>
+                    <div class="article-name">${item.name} <span class="span-tags">(${tags})</span></div>
                     <div class="article-text hidden">${item.text}</div>
                 </div>`
     });
 
     articles.innerHTML = html;
-
-    
 };
 
-renderArticles();
+const getArticleList = async () => {
+    listArticles = await axios.get('/articles/list');
+    renderArticles(listArticles);
+};
+
+getArticleList();
 
 addArticle.addEventListener('click', async () => {
-    const newArticle = await axios.post('/articles/list', {nameArt: artName.value, textArt: artText.value});
-    renderArticles();
+    listArticles = await axios.post('/articles/list', {nameArt: artName.value, textArt: artText.value});
+    renderArticles(listArticles);
     artName.value = '';
     artText.value = '';
 });
@@ -45,9 +46,11 @@ articles.addEventListener('click', (ev) => {
             }else{
                 item.classList.add('hidden');
             }
-            
         });
-        console.log(textAllArt);
-        
     }
+});
+
+tagSearch.addEventListener('input', async () => {
+    const tagsList = await axios.post('/articles/tags', {tag: tagSearch.value});
+    renderArticles(tagsList);
 });
