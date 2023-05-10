@@ -1,4 +1,7 @@
 const express = require('express');
+const Ajv = require('ajv');
+
+const ajv = new Ajv();
 
 const router = express.Router();
 
@@ -19,6 +22,47 @@ router.get('/list', (req, res) => {
 router.post('/list', (req, res) => {
     listArticles.push({id: listArticles.length + 1, name: req.body.nameArt, text: req.body.textArt});
     res.json(listArticles);
+});
+
+router.post('/personal/create', (req, res) => {
+    const schema = {
+        type: 'object',
+        properties: {
+            name: {
+                type: 'string',
+                minLength: 2,
+                maxLength: 20
+            },
+            surname: {
+                type: 'string',
+                minLength: 2,
+                maxLength: 20
+            },
+            age: {
+                type: 'integer'   
+            },
+            email: {
+                type: 'string',
+                pattern: '^[a-z0-9_-]+@[a-z0-9]+\.[a-z]{2,6}$'
+            },
+            phone: {
+                type: 'string',
+                pattern: '^\\+380[0-9]{9}$'
+            }
+        },
+        required: ['name', 'email', 'phone'],
+        additionalProperties: false,
+    };
+    let data = req.body;
+
+    const validate = ajv.compile(schema);
+    const valid = validate(data);
+
+    if (!valid){
+        res.json(validate.errors[0].message);
+    }else{
+        res.json('validated!');
+    }
 });
 
 router.post('/tags', (req, res) => {

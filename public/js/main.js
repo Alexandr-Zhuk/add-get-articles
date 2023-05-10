@@ -3,10 +3,11 @@ const addArticle = document.querySelector('.add-article-btn');
 const artName = document.querySelector('input[name=article-name]');
 const artText = document.querySelector('textarea[name=articleText]');
 const tagSearch = document.querySelector('input[name=tag-searc-inp]');
+const cont = document.querySelector('.container');
+const valBtn = document.querySelector('.btn-val');
 
 let listArticles;
 const renderArticles = async (listA) => {
-
     let html = '';
 
     listA.data.forEach((item) => {
@@ -35,7 +36,6 @@ addArticle.addEventListener('click', async () => {
     artText.value = '';
 });
 
-
 articles.addEventListener('click', (ev) => {
     if(ev.target.classList.contains('article-name')){
         const textArticle = ev.target.parentNode.querySelector('.article-text');
@@ -54,3 +54,18 @@ tagSearch.addEventListener('input', async () => {
     const tagsList = await axios.post('/articles/tags', {tag: tagSearch.value});
     renderArticles(tagsList);
 });
+
+const validSome = async () => {
+    const result = await axios.post('articles/personal/create', 
+    {
+        name: 'Alexandr', 
+        surname: 'Zhuk', 
+        age: 32, 
+        email: 'alexzhuk@gmail.com', 
+        phone: '+380931234567'
+    });
+    
+    cont.innerHTML += `<p>${result.data}</p>`;
+};
+
+valBtn.addEventListener('click', validSome);
